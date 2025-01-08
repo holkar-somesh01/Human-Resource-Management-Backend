@@ -9,5 +9,3 @@ const httpServer = http.createServer(app)
 const IO = new Server(httpServer, { cors: { origin: "*" } })
 
 module.exports = { IO, app, httpServer }
-
-//  Manage Confugration

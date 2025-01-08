@@ -20,9 +20,6 @@ exports.UpdateTeamLeadProfile = expressAsyncHandler(async (req, res) => {
             return res.status(400).json({ message: "Multer Error" })
         }
         const { id } = req.params
-        // if (!req.files["photo"] || !req.files["resume"] || !req.files["expletter"] || !req.files["other"]) {
-        //     return res.status(400).json({ message: "All Images Required" })
-        // }
         try {
             const documents = {}
             for (const key in req.files) {
@@ -120,11 +117,11 @@ exports.fetchTeamleadRequest = expressAsyncHandler(async (req, res) => {
 exports.LateTeamData = expressAsyncHandler(async (req, res) => {
     try {
         const result = await Attendence.aggregate([
-            { $sort: { date: 1, checkIn: 1 } }, // sort date ani  check in time 
+            { $sort: { date: 1, checkIn: 1 } },
             {
                 $group: {
-                    _id: { date: "$date", userId: "$userId" },  // group date ani userid
-                    firstLogin: { $first: "$$ROOT" }  // first login shodhto hia per daycha
+                    _id: { date: "$date", userId: "$userId" },
+                    firstLogin: { $first: "$$ROOT" }
                 }
             },
             { $replaceRoot: { newRoot: "$firstLogin" } }

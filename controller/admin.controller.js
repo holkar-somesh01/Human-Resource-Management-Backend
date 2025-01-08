@@ -122,37 +122,29 @@ exports.FetchAbsentEmployee = asyncHandler(async (req, res) => {
 })
 // Absend Employess 
 exports.absentEmployee = asyncHandler(async (req, res) => {
-    // const { monthstart } = req.body;
     const attendanceRecords = await Attendence.find();
     const monthstart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
-    // Populate userId for each attendance record
     let populatedRecords = [];
     for (let i = 0; i < attendanceRecords.length; i++) {
         const record = attendanceRecords[i];
         populatedRecords.push(await record.populate("userId"));
     }
-
-    // Generate all dates from monthstart to the current date
     const startDate = new Date(monthstart);
     const endDate = new Date();
     const dates = [];
 
     for (let currentDate = startDate; currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
-        dates.push(currentDate.toISOString().split('T')[0]); // Format to YYYY-MM-DD
+        dates.push(currentDate.toISOString().split('T')[0]);
     }
-
-    // Group attendance records by employee (userId)
     const employeeAttendance = {};
     for (let i = 0; i < populatedRecords.length; i++) {
         const { date, userId } = populatedRecords[i];
-        const id = userId.toString(); // Convert ObjectId to string
+        const id = userId.toString();
         if (!employeeAttendance[id]) {
             employeeAttendance[id] = { userId: userId._id, name: userId.name, role: userId.role, dates: [] };
         }
         employeeAttendance[id].dates.push(date);
     }
-
-    // Calculate absent dates per employee using previous absences logic
     const absences = Object.values(employeeAttendance).map(employee => {
         const absentDates = dates.filter(date => !employee.dates.includes(date));
         return {
