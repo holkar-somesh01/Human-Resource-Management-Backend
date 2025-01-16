@@ -19,4 +19,9 @@ router
     .get("/admin-late-employee", AdminController.AdminLateEmployee)
     // Absent Employee's Fetch
     .post("/admin-absent-employee", AdminController.absentEmployee)
+
+    .get("/fetch-employee", AdminController.fetchEmployee)
+    //  Fetch TeamLead's
+    .get("/fetch-teamlead", AdminController.fetchTeamLead)
+
 module.exports = router

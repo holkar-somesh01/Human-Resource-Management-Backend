@@ -6,15 +6,15 @@ router
     // Find Employee
     .get("/find-employee", HRController.findserchemployee)
     // Fetch Employee Leave Request
-    .get("/fetch-request", HRController.fetchEmployeeLeaveRequest)
+    .get("/fetch-request", HRProtected, HRController.fetchEmployeeLeaveRequest)
     // Fetch TeamLead Leave Request
-    .get("/fetch-teamlead-request", HRController.fetchTeamLeadLeaveRequest)
+    .get("/fetch-teamlead-request", HRProtected, HRController.fetchTeamLeadLeaveRequest)
     // Update  Leave Request
     .put("/update-leave/:id", HRController.updateLeaveRequest)
     //  Fetch Employee's
-    .get("/fetch-employee", HRController.fetchEmployee)
+    .get("/fetch-employee", HRProtected, HRController.fetchEmployee)
     //  Fetch TeamLead's
-    .get("/fetch-teamlead", HRController.fetchTeamLead)
+    .get("/fetch-teamlead", HRProtected, HRController.fetchTeamLead)
     //  Fetch  Employee Attendence
     .get("/employee-attendence-fetch", HRController.EmployeeAttendenceFetch)
     //  Fetch TeamLead Attendence

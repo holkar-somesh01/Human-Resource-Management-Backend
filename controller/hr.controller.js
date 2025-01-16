@@ -32,9 +32,11 @@ exports.fetchTeamLeadLeaveRequest = expressAsyncHandler(async (req, res) => {
     let TeamLeadRequest = []
     for (let i = 0; i < result.length; i++) {
         const employee = result[i]
+
         TeamLeadRequest.push(await employee.populate("userId"))
     }
     let TeamLead = []
+
     for (let i = 0; i < TeamLeadRequest.length; i++) {
         if (TeamLeadRequest[i].userId.role === "teamLead") {
             TeamLead.push(TeamLeadRequest[i])
@@ -92,25 +94,25 @@ exports.updateLeaveRequest = expressAsyncHandler(async (req, res) => {
             }
         }
         isOnLeave = true
+        await Employee.findByIdAndUpdate(result.userId._id, { annual: countLeave, isOnLeave: isOnLeave, unpaidLeaves: unPaidLeave })
     } else {
         await sendEmail({
             to: result.userId.email, subject: `About Your Leave`, message: `<p>Your Leave Is Rejected By HR.</p>`
         })
     }
-    await Leave.findByIdAndUpdate(id, { leave, })
-    await Employee.findByIdAndUpdate(result.userId._id, { annual: countLeave, isOnLeave: isOnLeave, unpaidLeaves: unPaidLeave })
+    await Leave.findByIdAndUpdate(id, { leave })
     const updatedResult = await Leave.find()
     IO.emit("updateLeaveRequest", updatedResult)
     res.json({ message: "Leave Update Success" })
 })
 // Fetch Employee
 exports.fetchEmployee = expressAsyncHandler(async (req, res) => {
-    const result = await Employee.find({ role: "employee" })
+    const result = await Employee.find({ role: "employee", userId: req.user })
     res.json({ message: "Employee Fetch Success", result })
 })
 // Fetch TeamLead
 exports.fetchTeamLead = expressAsyncHandler(async (req, res) => {
-    const result = await Employee.find({ role: "teamLead" })
+    const result = await Employee.find({ role: "teamLead", userId: req.user })
     res.json({ message: "TeamLead Fetch Success", result })
 })
 // Employee Attendece Fetch  

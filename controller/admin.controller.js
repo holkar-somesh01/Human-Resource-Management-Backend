@@ -34,6 +34,17 @@ exports.FindHrs = asyncHandler(async (req, res) => {
     const result = await Employee.find({ role: "hr" })
     res.json({ message: "Fetch Success", result })
 })
+
+// Fetch Employee
+exports.fetchEmployee = asyncHandler(async (req, res) => {
+    const result = await Employee.find({ role: "employee", })
+    res.json({ message: "Fetch Admin Employee  Success", result })
+})
+// Fetch TeamLead
+exports.fetchTeamLead = asyncHandler(async (req, res) => {
+    const result = await Employee.find({ role: "teamLead", })
+    res.json({ message: "Fetch Admin TeamLead  Success", result })
+})
 // Update HR Leave
 exports.UpdateHrLeave = asyncHandler(async (req, res) => {
     const { leave, dayofLeave } = req.body
@@ -176,7 +187,7 @@ exports.AdminLateEmployee = asyncHandler(async (req, res) => {
         { $replaceRoot: { newRoot: "$firstLogin" } }
         ]);
 
-        const populatedResult = await Attendence.populate(result, { path: "userId" });
+        const populatedResult = await Attendence.populate(result, { path: "userId" })
         res.json({ message: "Late HR Fetch Success", result: populatedResult });
     } catch (error) {
         console.error("Error fetching late HR data:", error);
